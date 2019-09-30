@@ -25,7 +25,7 @@ function App() {
   function getConts(page){
     Axios.get('//www.career.go.kr/cnet/openapi/getOpenApi.json', {
       params: {
-        apiKey: 'c4bdccf4b40d1f161d3173567082fcfe',
+        apiKey: '',
         svcType: 'api',
         svcCode: 'SCHOOL',
         contentType: 'Json',
