@@ -1,26 +1,25 @@
 import React, { Component, useState } from 'react';
-// import logo from './logo.svg';
-// import './App.css';
 import Axios from 'axios';
-
 import { Button, Table, Pagination } from 'react-materialize';
 
 function App() {
-  // const [page, setPage] = useState(1);
-  const [data, setData] = useState([
-    {
-      totalCount: 0,
-      schoolName: '',
-      adres: '',
-      campusName: '',
-      estType: '',
-      link: '',
-      region: '',
-      schoolGubun: '',
-      schoolType: ''
-    }
-  ]);
-  const [row, setList] = useState();
+  const [data, setData] = useState(() =>{
+    getConts(1);
+
+    return [
+      {
+        totalCount: 0,
+        schoolName: '',
+        adres: '',
+        campusName: '',
+        estType: '',
+        link: '',
+        region: '',
+        schoolGubun: '',
+        schoolType: ''
+      }
+    ]
+  });
 
   function getConts(page){
     Axios.get('//www.career.go.kr/cnet/openapi/getOpenApi.json', {
@@ -35,31 +34,29 @@ function App() {
       }
     }).then(function(response){
       setData(response.data.dataSearch.content);
-      setList(response.data.dataSearch.content.map((d, i) =>
-        <tr key={i}>
-          <td>
-            <a href={(d.link!='null') ? d.link : '#'} target="_blank">{d.schoolName}</a>
-          </td>
-          <td>{d.adres}</td>
-          <td>{d.campusName}</td>
-          <td>{d.estType}</td>
-          <td>{d.region}</td>
-          <td>{d.schoolGubun}</td>
-          <td>{d.schoolType}</td>
-        </tr>
-      ));
-      console.log(data);
     });
   }
 
-
+  const row = data.map((d, i) =>
+    <tr key={i}>
+      <td>
+        <a href={(d.link!='null') ? d.link : '#'} target="_blank">{d.schoolName}</a>
+      </td>
+      <td>{d.adres}</td>
+      <td>{d.campusName}</td>
+      <td>{d.estType}</td>
+      <td>{d.region}</td>
+      <td>{d.schoolGubun}</td>
+      <td>{d.schoolType}</td>
+    </tr>
+  );
 
   return (
     <div>
       <div id="conts">
         {/* <Button onClick={() => getConts(0)}>call</Button> */}
 
-        {/* 전체 검색 결과 수: {data[0].totalCount} */}
+        전체 검색 결과 수: {data[0].totalCount}
 
         <Table>
           <thead>
@@ -75,13 +72,12 @@ function App() {
           </thead>
 
           <tbody>
-            {/* {row} */}
+            {row}
           </tbody>
         </Table>
 
         <Pagination
-          items={440}
-          // activePage={page}
+          items={parseInt(data[0].totalCount) / 10}
           maxButtons={10}
           onSelect={(i) => getConts(i)} />
       </div>
